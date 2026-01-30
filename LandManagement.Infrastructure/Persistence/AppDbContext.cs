@@ -1,10 +1,5 @@
 ﻿using LandManagement.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LandManagement.Infrastructure.Persistence
 {
@@ -73,7 +68,7 @@ namespace LandManagement.Infrastructure.Persistence
                       .HasForeignKey(h => h.LandCropId);
             });
 
-            modelBuilder.Entity<LandInput>(entity => 
+            modelBuilder.Entity<LandInput>(entity =>
             {
                 entity.HasOne(li => li.LandCrop)
                       .WithMany(lc => lc.LandInputs)
@@ -107,7 +102,7 @@ namespace LandManagement.Infrastructure.Persistence
                 //      .HasForeignKey(h => h.LandCropId);
             });
 
-            foreach(var entityType in modelBuilder.Model.GetEntityTypes())
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
                 if (typeof(BaseEntity).IsAssignableFrom(entityType.ClrType))
                 {
