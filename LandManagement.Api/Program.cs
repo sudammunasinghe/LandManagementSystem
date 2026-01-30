@@ -1,4 +1,8 @@
+using LandManagement.Application.Interfaces.IRepositories;
+using LandManagement.Application.Interfaces.IServices;
+using LandManagement.Application.Services;
 using LandManagement.Infrastructure.Persistence;
+using LandManagement.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,6 +10,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")));
+
+//Register Services
+builder.Services.AddScoped<IOwnerService, OwnerService>();
+builder.Services.AddScoped<IOwnerRepository, OwnerRepository>();
 
 // Add services to the container.
 
