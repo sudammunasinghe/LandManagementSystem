@@ -15,6 +15,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IOwnerService, OwnerService>();
 builder.Services.AddScoped<IOwnerRepository, OwnerRepository>();
 
+builder.Services.AddScoped<ILandService, LandService>();
+builder.Services.AddScoped<ILandRepository, LandRepository>();
+
 // Add services to the container.
 
 builder.Services.AddControllers();
