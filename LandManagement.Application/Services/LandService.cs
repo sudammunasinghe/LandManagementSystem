@@ -14,6 +14,10 @@ namespace LandManagement.Application.Services
             _landRepository = landRepository;
         }
 
+        /// <summary>
+        /// Retrieves all active land details
+        /// </summary>
+        /// <returns>A list of active land records</returns>
         public async Task<IEnumerable<LandDto>> GetAllLandsAsync()
         {
             var lands = await _landRepository.GetAllLandsAsync();
@@ -27,7 +31,7 @@ namespace LandManagement.Application.Services
                 OwnerDetails = land.Owner == null ? null : new OwnerDto
                 {
                     OwnerId = land.Owner.Id,
-                    FullName = land.Owner.FirstName + " " + land.Owner.LastName,
+                    FullName = $"{land.Owner.FirstName} {land.Owner.LastName}".Trim(),
                     NIC = land.Owner.NIC,
                     Address = land.Owner.Address,
                     Email = land.Owner.Email
@@ -35,9 +39,18 @@ namespace LandManagement.Application.Services
             }).ToList();
             return result;
         }
+
+        /// <summary>
+        /// Retrieves land details by land identifier
+        /// </summary>
+        /// <param name="landId">The unique identifier of the land</param>
+        /// <returns>The land details if found; otherwiae  null</returns>
         public async Task<LandDto> GetLandDetailsByLandIdAsync(int landId)
         {
             var land = await _landRepository.GetLandDetailsByLandIdAsync(landId);
+            if (land == null)
+                return null;
+
             var result = land == null ? null : new LandDto
             {
                 LandId = land.Id,
@@ -56,6 +69,13 @@ namespace LandManagement.Application.Services
             };
             return result;
         }
+
+        /// <summary>
+        /// Creates a new land record
+        /// </summary>
+        /// <param name="dto">The data transfer object containing land details</param>
+        /// <returns>The unique identifier of the newly created land</returns>
+        /// <exception cref="Exception">Thrown if the specified owner does not exist.</exception>
         public async Task<int> CreateNewLand(CreateLandDto dto)
         {
             if (!await _landRepository.IsOwnerExists(dto.OwnerId))
@@ -72,6 +92,13 @@ namespace LandManagement.Application.Services
             await _landRepository.CreateNewLand(newLand);
             return newLand.Id;
         }
+
+        /// <summary>
+        /// Updates the details of an existing land record
+        /// </summary>
+        /// <param name="dto">The data transfer object containing updated land information</param>
+        /// <returns>Returns true if the update was successful. otherwise, false</returns>
+        /// <exception cref="Exception">Thrown if the specified land ID does not exist.</exception>
         public async Task<bool> UpdateLandDetailsAsync(UpdateLandDto dto)
         {
             if (!await _landRepository.IsLandExists(dto.Id))
@@ -89,6 +116,23 @@ namespace LandManagement.Application.Services
 
             };
             await _landRepository.UpdateLandDetailsAsync(updatedLand);
+            return true;
+        }
+
+        /// <summary>
+        /// Inactivates a land record by setting its active status to false.
+        /// </summary>
+        /// <param name="landId">The unique identifier of the land to inactivate</param>
+        /// <returns>
+        /// Returns true if the land was succesfully incativated.
+        /// Throws an exception if the land does not exists.
+        /// </returns>
+        /// <exception cref="KeyNotFoundException">Thrown if the land does not exist or no rows are affected.</exception>
+        public async Task<bool> InactivateLandByLandIdAsync(int landId)
+        {
+            var affectedRows = await _landRepository.InactivateLandByLandIdAsync(landId);
+            if (affectedRows == 0)
+                throw new KeyNotFoundException("Invalid Land Id ...");
             return true;
         }
     }
