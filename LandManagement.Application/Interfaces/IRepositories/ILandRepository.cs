@@ -34,7 +34,7 @@ namespace LandManagement.Application.Interfaces.IRepositories
         /// <summary>
         /// Inactivates a land record by setting its active status to false.
         /// </summary>
-        /// <param name="landId">The unique identifier of the land inactivate</param>
+        /// <param name="landId">The unique identifier of the land to inactivate</param>
         /// <returns>The number of rows affected in the database</returns>
         Task<int> InactivateLandByLandIdAsync(int landId);
 
