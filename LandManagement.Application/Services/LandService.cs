@@ -101,20 +101,16 @@ namespace LandManagement.Application.Services
         /// <exception cref="Exception">Thrown if the specified land ID does not exist.</exception>
         public async Task<bool> UpdateLandDetailsAsync(UpdateLandDto dto)
         {
-            if (!await _landRepository.IsLandExists(dto.Id))
-                throw new Exception("Invalid Land Id...");
+            var updatedLand = await _landRepository.GetLandDetailsByLandIdAsync(dto.Id);
+            if (updatedLand == null)
+                throw new Exception($"Land with Id {dto.Id} not found ...");
 
-            var updatedLand = new Land
-            {
-                Id = dto.Id,
-                Name = dto.Name,
-                Location = dto.Location,
-                DeedNumber = dto.DeedNumber,
-                OwnerId = dto.OwnerId,
-                SizeInAcres = dto.SizeInAcres,
-                LastModifiedDateTime = DateTime.UtcNow
+            updatedLand.Name = dto.Name;
+            updatedLand.Location = dto.Location;
+            updatedLand.DeedNumber = dto.DeedNumber;
+            updatedLand.OwnerId = dto.OwnerId;
+            updatedLand.SizeInAcres = dto.SizeInAcres;
 
-            };
             await _landRepository.UpdateLandDetailsAsync(updatedLand);
             return true;
         }

@@ -94,18 +94,16 @@ namespace LandManagement.Application.Services
         /// <exception cref="Exception">Thrown if the specified owner ID does not exist</exception>
         public async Task<bool> UpdateOwnerDetailsAsync(UpdateOwnerDto dto)
         {
-            if (!await _ownerRepository.IsOwnerExists(dto.Id))
-                throw new Exception("Owner is not exists ...");
+            var updatedOwner = await _ownerRepository.GetOwnerDetailsByOwnerIdAsync(dto.Id);
+            if (updatedOwner == null)
+                throw new Exception($"Owner with Id {dto.Id} not found ...");
 
-            var updatedOwner = new Owner
-            {
-                Id = dto.Id,
-                FirstName = dto.FirstName,
-                LastName = dto.LastName,
-                NIC = dto.NIC,
-                Address = dto.Address,
-                Email = dto.Email
-            };
+            updatedOwner.FirstName = dto.FirstName;
+            updatedOwner.LastName = dto.LastName;
+            updatedOwner.NIC = dto.NIC;
+            updatedOwner.Address = dto.Address;
+            updatedOwner.Email = dto.Email;
+
             await _ownerRepository.UpdateOwnerDetailsAsync(updatedOwner);
             return true;
         }

@@ -74,16 +74,5 @@ namespace LandManagement.Infrastructure.Repositories
                     .SetProperty(s => s.LastModifiedDateTime, DateTime.UtcNow)
                 );
         }
-
-        /// <summary>
-        /// Checks if the owner is exists in the database
-        /// </summary>
-        /// <param name="ownerId">The unique identifier of the owner</param>
-        /// <returns>True if the owner exists; otherwise, false</returns>
-        public async Task<bool> IsOwnerExists(int ownerId)
-        {
-            return await _context.Owners
-                .AnyAsync(o => o.Id == ownerId);
-        }
     }
 }

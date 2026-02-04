@@ -44,12 +44,5 @@ namespace LandManagement.Application.Interfaces.IRepositories
         /// <param name="ownerId">The unique identifier of the owner</param>
         /// <returns>True if the owner exists; otherwise, false</returns>
         Task<bool> IsOwnerExists(int ownerId);
-
-        /// <summary>
-        /// Checks if the land is exists in the database
-        /// </summary>
-        /// <param name="landId">The unique identifier of the land</param>
-        /// <returns>True if the land exists; otherwise, false</returns>
-        Task<bool> IsLandExists(int landId);
     }
 }

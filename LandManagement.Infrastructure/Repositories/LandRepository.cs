@@ -87,16 +87,5 @@ namespace LandManagement.Infrastructure.Repositories
             return await _context.Owners
                 .AnyAsync(o => o.Id == ownerId);
         }
-
-        /// <summary>
-        /// Checks if the land exists in the database
-        /// </summary>
-        /// <param name="landId">The unique identifier of the land</param>
-        /// <returns>True if the land exists; otherwise, false</returns>
-        public async Task<bool> IsLandExists(int landId)
-        {
-            return await _context.Lands
-                 .AnyAsync(l => l.Id == landId);
-        }
     }
 }

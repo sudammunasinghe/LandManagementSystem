@@ -37,12 +37,5 @@ namespace LandManagement.Application.Interfaces.IRepositories
         /// <param name="ownerId">The unique identifier of the owner to inactivate</param>
         /// <returns>The number of rows affected in the database</returns>
         Task<int> InactivateOwnerByOwnerIdAsync(int ownerId);
-
-        /// <summary>
-        /// Checks if the owner is exists in the database
-        /// </summary>
-        /// <param name="ownerId">The unique identifier of the owner</param>
-        /// <returns>True if the owner exists; otherwise, false</returns>
-        Task<bool> IsOwnerExists(int ownerId);
     }
 }

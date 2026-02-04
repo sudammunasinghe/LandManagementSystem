@@ -19,6 +19,18 @@ namespace LandManagement.Infrastructure.Persistence
         public DbSet<LaborCost> LaborCosts { get; set; }
         public DbSet<Sale> Sales { get; set; }
 
+        public override Task<int> SaveChangesAsync(CancellationToken token = default)
+        {
+            foreach (var entry in ChangeTracker.Entries<BaseEntity>())
+            {
+                if (entry.State == EntityState.Modified)
+                {
+                    entry.Entity.LastModifiedDateTime = DateTime.UtcNow;
+                }
+            }
+            return base.SaveChangesAsync(token);
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Owner>()
@@ -106,9 +118,9 @@ namespace LandManagement.Infrastructure.Persistence
             {
                 if (typeof(BaseEntity).IsAssignableFrom(entityType.ClrType))
                 {
-                    modelBuilder.Entity(entityType.ClrType).Property(nameof(BaseEntity.IsActive)).HasDefaultValue(true);
-                    modelBuilder.Entity(entityType.ClrType).Property(nameof(BaseEntity.CreatedDateTime)).HasDefaultValueSql("GETDATE()");
-                    modelBuilder.Entity(entityType.ClrType).Property(nameof(BaseEntity.LastModifiedDateTime)).HasDefaultValueSql("GETDATE()");
+                    modelBuilder.Entity(entityType.ClrType).Property(nameof(BaseEntity.IsActive)).HasDefaultValueSql("1");
+                    modelBuilder.Entity(entityType.ClrType).Property(nameof(BaseEntity.CreatedDateTime)).HasDefaultValueSql("GETUTCDATE()");
+                    modelBuilder.Entity(entityType.ClrType).Property(nameof(BaseEntity.LastModifiedDateTime)).HasDefaultValueSql("GETUTCDATE()");
                 }
             }
 
