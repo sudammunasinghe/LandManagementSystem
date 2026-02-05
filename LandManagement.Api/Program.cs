@@ -18,6 +18,9 @@ builder.Services.AddScoped<IOwnerRepository, OwnerRepository>();
 builder.Services.AddScoped<ILandService, LandService>();
 builder.Services.AddScoped<ILandRepository, LandRepository>();
 
+builder.Services.AddScoped<ICropService, CropService>();
+builder.Services.AddScoped<ICropRepository, CropRepository>();
+
 // Add services to the container.
 
 builder.Services.AddControllers();
